@@ -1,0 +1,13 @@
+name: Themes Previw
+version: 1.0.0
+description: "This plugin add simple themes preview for your **Grav site**."
+icon: envelope-o
+author:
+  name: NunoPress LLC
+  email: hello@nunopress.com
+  url: http://nunopress.com
+homepage: https://github.com/nunopress/grav-plugin-themes_preview
+demo: http://grav-demo.nunopress.com/
+keywords: "themes, preview, plugin"
+bugs: https://github.com/nunopress/grav-plugin-themes_preview/issues
+license: MIT

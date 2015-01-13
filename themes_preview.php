@@ -3,6 +3,8 @@
 use Grav\Common\Page\Page;
 use RocketTheme\Toolbox\Event\Event;
 
+use RocketTheme\Toolbox\Session\Session;
+
 use Grav\Common\Plugin;
 use Grav\Common\Data\Data;
 
@@ -26,25 +28,47 @@ class Themes_PreviewPlugin extends Plugin
       return;
     }
 
-    // Validate presence of params.
-    if (!$this->grav['uri']->params() or !$this->grav['uri']->param('theme')) {
+    if (!isset($this->grav['themes_preview']) or !$this->grav['themes_preview']) {
+      $this->grav->redirect('/' . $this->grav['config']->get('system.pages.theme'));
+    }
+
+    $this->enable([
+      'onPagesInitialized'    => ['onPagesInitialized', 0],
+      'onPageNotFound'        => ['onPageNotFound', 100],
+      'onTwigInitialized'     => ['onTwigInitialized', 0],
+      'onTwigTemplatePaths'   => ['onTwigTemplatePaths', 0],
+      'onTwigSiteVariables'   => ['onTwigSiteVariables', 0],
+      'onOutputGenerated'     => ['onOutputGenerated', 0]
+    ]);
+  }
+
+  public function onPagesInitialized()
+  {
+    $pages = $this->grav['pages'];
+    $uri = $this->grav['uri'];
+
+    $base = $pages->base();
+
+    $path = '/' . $this->grav['themes_preview'] . '/' . $base;
+
+    $pages->base($path);
+  }
+
+  public function onPageNotFound(Event $event)
+  {
+    $uri    = $this->grav['uri'];
+    $pages  = $this->grav['pages'];
+
+    $path = str_replace('/' . $this->grav['themes_preview'], '', $uri->path());
+
+    $page = $pages->dispatch($path, true);
+
+    if (!$page) {
       return;
     }
 
-    // Save current theme.
-    $this->current_theme = $this->grav['uri']->param('theme');
-
-    // Save current theme into config.
-    $this->grav['config']->set('system.pages.theme', $this->current_theme);
-    $this->grav['config']->set('system.home.alias', '/' . $this->current_theme . $this->grav['config']->get('system.home.alias'));
-
-    $this->enable([
-      'onTwigTemplatePaths'   => ['onTwigTemplatePaths', 0],
-      'onTwigInitialized'     => ['onTwigInitialized', 0],
-      'onPageNotFound'        => ['onPageNotFound', 100],
-      'onPagesInitialized'    => ['onPagesInitialized', 100],
-      'onTwigSiteVariables'   => ['onTwigSiteVariables', 100]
-    ]);
+    $event->page = $page;
+    $event->stopPropagation();
   }
 
   public function onTwigInitialized()
@@ -69,45 +93,22 @@ class Themes_PreviewPlugin extends Plugin
     return $output;
   }
 
-  public function onPageNotFound(Event $event)
-  {
-    $uri    = $this->grav['uri'];
-    $pages  = $this->grav['pages'];
-
-    $page = $pages->dispatch('/' . $this->current_theme . $uri->path(), true);
-
-    if (!$page) {
-      return;
-    }
-
-    $event->page = $page;
-    $event->stopPropagation();
-  }
-
-  public function onPagesInitialized()
-  {
-    //$page = $this->grav['page'];
-
-    //$this->grav['pages'] = $page->find('/' . $this->current_theme)->children();
-  }
-
   public function onTwigSiteVariables()
   {
-    $this->grav['twig']->twig_vars['current_theme'] = $this->current_theme;
+    $this->grav['twig']->twig_vars['current_theme'] = $this->grav['themes_preview'];
   }
 
-  private function mergeConfig(Page $page, $params = [])
+  public function onOutputGenerated()
   {
-    $this->config = new Data((array) $this->grav['config']->get('plugins.simple_form'));
+    $this->template_file = 'plugins/themes_preview/bar.html.twig';
+    $this->template_vars = [
+      'root_url'      => $this->grav['uri']->rootUrl(false),
+      'themes'        => $this->grav['themes']->all(),
+      'current_theme' => $this->grav['themes_preview']
+    ];
 
-    if (isset($page->header()->simple_form)) {
-      if (is_array($page->header()->simple_form)) {
-        $this->config = new Data(array_replace_recursive($this->config->toArray(), $page->header()->simple_form));
-      } else {
-        $this->config->set('enabled', $page->header()->simple_form);
-      }
-    }
+    $content = $this->grav['twig']->twig()->render($this->template_file, $this->template_vars);
 
-    $this->config = new Data(array_replace_recursive($this->config->toArray(), $params));
+    echo $content;
   }
 }

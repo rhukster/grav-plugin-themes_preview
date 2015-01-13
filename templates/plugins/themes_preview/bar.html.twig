@@ -1,4 +1,11 @@
 <style>
+  /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+  html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+
+  #themes_preview-spacer {
+    height: 54px;
+  }
+
   #themes_preview-header {
     position: fixed;
     left: 0;
@@ -8,12 +15,83 @@
     background: rgba(255,255,255,0.95);
     z-index: 10000;
     box-shadow: 0 0 1px 0 rgba(16,16,32,0.25), 0 0 2px 0 rgba(0,0,0,0.15);
-    height: 3.75em;
     transition: top 0.25s ease-in-out;
-    font-size: 0.9em;
     z-index: 10000;
     cursor: default;
+    height: 54px;
   }
+
+  #themes_preview-header h1 {
+    letter-spacing: -0.5px;
+    font-weight: 600;
+    float: left;
+    height: 54px;
+    line-height: 55px;
+    margin: 0 1.25em 0 0.5em;
+    display: inline-block;
+    padding: 0;
+  }
+
+  #themes_preview-header h1 span {
+    font-size: 30px;
+  }
+
+  #themes_preview-header select {
+    margin-top: 7px;
+    height: 40px;
+    width: auto;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -o-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: #f8f8f8;
+    border-radius: 6px;
+    border: solid 1px #e5e5e5;
+    display: block;
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+  }
+
+  #themes_preview-header option,
+  #themes_preview-header h1,
+  #themes_preview-header select {
+    color: #000;
+    font-family: "Helvetica";
+    font-size: 20px;
+  }
+
+  /**
+   * Fix for themes
+   */
+
+  {% if current_theme in ['alpha'] %}
+    #header {
+      top: 54px !important;
+    }
+  {% elseif current_theme in ['zsimplex'] %}
+    header {
+      top: 54px !important;
+    }
+  {% elseif current_theme in ['antimatter'] %}
+    #sb-site, .sb-site-container, .sb-slidebar {
+      margin-top: 24px !important;
+    }
+    #header {
+      top: 54px !important;
+    }
+  {% endif %}
 </style>
 
-<header id="themes_preview-header"></div>
+<div id="themes_preview-spacer"></div>
+
+<div id="themes_preview-header">
+  <h1><span>Themes Preview:</span></h1>
+
+  <select onchange="location.href = this.value;">
+    {% for theme, obj in themes %}
+      <option value="{{ root_url }}/{{ theme }}" {% if current_theme == theme %}selected{% endif %}>{{ theme | capitalize }}</option>
+    {% endfor %}
+  </select>
+</div>

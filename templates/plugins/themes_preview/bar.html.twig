@@ -1,19 +1,129 @@
 <style>
-  #themes_preview-header {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: #fff;
-    background: rgba(255,255,255,0.95);
-    z-index: 10000;
-    box-shadow: 0 0 1px 0 rgba(16,16,32,0.25), 0 0 2px 0 rgba(0,0,0,0.15);
-    height: 3.75em;
-    transition: top 0.25s ease-in-out;
-    font-size: 0.9em;
-    z-index: 10000;
-    cursor: default;
-  }
+    #themes_preview-header {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        background: rgba(255,255,255,0.95);
+        z-index: 10000;
+        box-shadow: 0 0 1px 0 rgba(16,16,32,0.25), 0 0 2px 0 rgba(0,0,0,0.15);
+        transition: top 0.25s ease-in-out;
+        z-index: 10000;
+        cursor: default;
+        height: 54px;
+    }
+
+    #themes_preview-header h1 {
+        letter-spacing: -0.5px;
+        font-weight: 600;
+        float: left;
+        height: 54px;
+        line-height: 55px;
+        margin: 0 1.25em 0 0.5em;
+        display: inline-block;
+        padding: 0;
+    }
+
+    #themes_preview-header h1 span {
+        font-size: 30px;
+    }
+
+    #themes_preview-header select {
+        margin-top: 7px;
+        height: 40px;
+        width: auto;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        -o-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        background: #f8f8f8;
+        border-radius: 6px;
+        border: solid 1px #e5e5e5;
+        display: block;
+        outline: 0;
+        padding: 0 1em;
+        text-decoration: none;
+    }
+
+    #themes_preview-header option,
+    #themes_preview-header h1,
+    #themes_preview-header select {
+        color: #000;
+        font-family: "Helvetica";
+        font-size: 20px;
+    }
+
+    body {
+        /*margin-top: 54px;*/
+    }
+
+    /**
+     * Fix for themes
+     */
+    {% set default_height = '54px' %}
+
+    {% if current_theme in ['alpha'] %}
+        #header {
+            top: {{ default_height }};
+        }
+    {% elseif current_theme in ['developer', 'machine'] %}
+        .header {
+            margin-top: {{ default_height }};
+        }
+    {% elseif current_theme in ['leoshop'] %}
+        .header-top {
+            margin-top: {{ default_height }};
+        }
+    {% elseif current_theme in ['zsimplex'] %}
+        header {
+            top: {{ default_height }};
+        }
+    {% elseif current_theme in ['antimatter'] %}
+        #sb-site, .sb-site-container, .sb-slidebar {
+            margin-top: 24px;
+        }
+        #header {
+            top: {{ default_height }};
+        }
+        #snipcart-modal {
+            top: 25px;
+        }
+    {% elseif current_theme in ['collections', 'ontheroad'] %}
+        #container {
+            margin-top: {{ default_height }};
+        }
+    {% elseif current_theme in ['parallelism'] %}
+        #wrapper {
+            margin-top: {{ default_height }};
+        }
+    {% elseif current_theme in ['soundpro'] %}
+        .site {
+            margin-top: {{ default_height }};
+        }
+    {% endif %}
+
+    {% if is_admin %}
+        #admin-main .content-padding,
+        #admin-main .grav-update.grav {
+            margin-top: 3.4rem;
+        }
+
+        #admin-main .titlebar,
+        #admin-sidebar {
+            top: 3.4rem;
+        }
+    {% endif %}
 </style>
 
-<header id="themes_preview-header"></div>
+<div id="themes_preview-header">
+    <h1><span>Themes Preview:</span></h1>
+
+    <select onchange="location.href = this.value;">
+        <option></option>
+        {% for theme in themes %}
+            <option value="{{ theme.url }}" {% if theme.current %}selected{% endif %}>{{ theme.name }} by {{ theme.author }}</option>
+        {% endfor %}
+    </select>
+</div>

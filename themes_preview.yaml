@@ -1,5 +1,3 @@
 enabled: true
 
-default: "antimatter"
-
-session_key: "_themes_preview_"
+master_domain: ""

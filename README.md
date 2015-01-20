@@ -6,7 +6,7 @@
 
 Installing the plugin can be done in one of two ways. Our GPM (_Grav Package Manager_) installation method enables you to quickly and easily install the plugin with a simple terminal command, while the manual method enables you to do so via a zip file.
 
-> *IMPORTANT:* You need to copy on your Grav root the file `your/site/grav/user/plugins/themes_preview/setup.php` for working, because the themes preview plugin working with first path in the url for the theme name.
+> *IMPORTANT:* You need working with subdomains, so follow the instructions in the Usage section.
 
 ## GPM Installation (Preferred)
 
@@ -28,7 +28,73 @@ You should now have all the plugin files under
 
 # Usage
 
-You don't need anything, all is automatic.
+For working correctly you need to use the environment configuration, you can learn how to from the [Grav Learn site](http://learn.getgrav.org/advanced/environment-config).
+
+In the plugin configuration file you have `master_domain` you can configure with the main domain (_in my example is **grav.dev**_) or you can leave empty and the plugin give the theme key name from the last subdomain (_in my example **machine.grav.dev** get **machine**_).
+
+The best way to have 3 files on config folder and edit this keys:
+
+###### config/site.yaml
+
+You can edit the site title for seo or anything.
+
+    title: Grav Themes Preview - Machine
+
+###### config/streams.yaml
+
+In this case you need to remap the assets/images/pages/accounts streams to the subdomain/environment.
+
+    schemes:
+        asset:
+            type: ReadOnlyStream
+            paths:
+                - machine.grav.dev/assets
+
+        image:
+            type: ReadOnlyStream
+            paths:
+                - user://machine.grav.dev/images
+
+        page:
+            type: ReadOnlyStream
+            paths:
+                - user://machine.grav.dev/pages
+
+        account:
+            type: ReadOnlyStream
+            paths:
+            - user://machine.grav.dev/accounts
+
+###### config/system.yaml
+
+In the end you need to change the default theme with your.
+
+    pages:
+        theme: machine
+
+#### Folder structure example
+
+Now you can see in my example what you need to working.
+
+    user
+        accounts
+        config
+        data
+        pages
+        plugins
+        themes
+
+        machine.grav.dev
+            accounts
+            assets
+            config
+                site.yaml
+                streams.yaml
+                system.yaml
+            images
+            pages
+                01.home
+                    default.md
 
 # Updating
 

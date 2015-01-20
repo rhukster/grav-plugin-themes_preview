@@ -1,3 +1,16 @@
+# v1.2.0
+## 01/20/2015
+
+1. [](#new)
+  * Completely rewrite for use environment system integrated in Grav. Now need to setup the site with wildcard subdomain.
+  * Community testing started.
+
+# v1.1.1
+## 01/15/2015
+
+1. [](#bugfix)
+  * Fixed position for modal window into antimatter theme. @todo: check to other templates where shopcart plugin is avariable.
+
 # v1.1.0
 ## 01/13/2015
 

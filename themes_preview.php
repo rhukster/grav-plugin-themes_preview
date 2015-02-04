@@ -2,7 +2,6 @@
 
 use Grav\Common\Plugin;
 
-
 class Themes_PreviewPlugin extends Plugin
 {
     public static function getSubscribedEvents()
@@ -25,7 +24,7 @@ class Themes_PreviewPlugin extends Plugin
 
         $this->enable([
             'onTwigTemplatePaths'   => ['onTwigTemplatePaths', 0],
-            'onOutputRendered'      => ['onOutputRendered', 100000]
+            'onOutputGenerated'     => ['onOutputGenerated', 100000]
         ]);
     }
 
@@ -34,7 +33,7 @@ class Themes_PreviewPlugin extends Plugin
         $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
     }
 
-    public function onOutputRendered()
+    public function onOutputGenerated()
     {
         // Save most used objects.
         $grav   = $this->grav;
@@ -56,44 +55,43 @@ class Themes_PreviewPlugin extends Plugin
         // Assign array to themes.
         $themes = [];
 
-        // Get master domain from configuration or get latest segment in the host.
-        if ($config->get('plugins.themes_preview.master_domain'))
-        {
-            $master_domain = $config->get('plugins.themes_preview.master_domain');
-        } else {
-            $host = $uri->host();
-
-            $segments = explode('.', $host);
-
-            $master_domain = str_replace($segments[0] . '.', '', $host);
-        }
-
         // Save most used variables for template rendering.
         $theme_current  = $config->get('system.pages.theme');
         $root_url       = $uri->rootUrl(false);
         $request_scheme = $_SERVER['REQUEST_SCHEME'];
 
+        $master_domain = str_replace($theme_current . '.', '', $uri->host());
+
         // Cycle all themes.
         foreach ($themes_obj as $theme_key => $theme_obj) {
-            $themes[] = [
+            $themes[$theme_key] = [
                 'name'      => $theme_obj->blueprints()->get('name'),
-                'key'       => $theme_key,
                 'url'       => "{$request_scheme}://{$theme_key}.{$master_domain}{$root_url}/",
                 'author'    => $theme_obj->blueprints()->get('author.name'),
-                'current'   => ($theme_current == $theme_key) ? true : false
+                'current'   => ($theme_current == $theme_key) ? true : false,
+                'homepage'  => $theme_obj->blueprints()->get('homepage'),
+                'preview'   => $theme_obj->blueprints()->get('thumbnail')
             ];
         }
 
-        $template_file = 'plugins/themes_preview/bar.html.twig';
+        $template_file = 'plugins/themes_preview/bar-new.html.twig';
         $template_vars = [
             'themes'        => $themes,
             'is_admin'      => $this->isAdmin(),
             'current_theme' => $theme_current
         ];
 
-        // Render template file.
-        $content = $twig->twig()->render($template_file, $template_vars);
+        $template_vars = array_merge($template_vars, $twig->twig_vars);
 
-        echo $content;
+        if ($uri->host() == $master_domain) {
+            // Render template file.
+            $content = $twig->twig()->render($template_file, $template_vars);
+
+            // Remove the grav output content.
+            $grav->output = null;
+
+            // Print the themes bar.
+            echo $content;
+        }
     }
 }

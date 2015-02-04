@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+        <title>{{ site.title }}</title>
+
+        <style>
+            html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+            }
+
+            article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+                display: block;
+            }
+
+            body {
+                line-height: 1;
+            }
+
+            ol, ul {
+                list-style: none;
+            }
+
+            blockquote, q {
+                quotes: none;
+            }
+
+            blockquote:before, blockquote:after,
+            q:before, q:after {
+                content: '';
+                content: none;
+            }
+
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            body {
+                overflow: hidden;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: 400;
+                color: #333;
+                font-size: 13px;
+                background: url('{{ url('plugin://themes_preview/assets/images/bg.png') }}') repeat;
+            }
+
+            a {
+                text-decoration: none;
+                color: #fff;
+            }
+
+            #switcher {
+                height: 59px;
+                padding:0;
+                background:#1a1a1a;
+                border-bottom: 1px solid #353535;
+                z-index: 99999;
+                position: fixed;
+                width: 100%;
+            }
+
+
+            .share {
+                float: right;
+                margin-left: 14px;
+                border-radius:2px;
+                padding: 6px 0 3px 10px;
+                margin-top: 3px;
+                background:#333333;
+            }
+
+            #theme_list {
+                position: relative;
+            }
+
+            #theme_select {
+                background: #2b2b2b url('{{ url('plugin://themes_preview/assets/images/arrow.png') }}') no-repeat;
+                width: 300px;
+                display: block;
+                padding:10px 9px;
+                color: #dfdfdf;
+                background-position: 95% 53%;
+                border-radius:2px;
+                font-weight: 700;
+                margin-top: 3px;
+            }
+
+            #theme_select:hover {
+                color:#F0F0F0;
+            }
+
+            #theme_dropdown_list {
+                border-radius: 10px;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                padding: 20px;
+            }
+
+            .center {
+                margin: auto;
+                width: 98%;
+                padding: 11px 0;
+            }
+
+            .center ul li {
+                display: inline;
+                float: left;
+            }
+
+            .center ul li ul {
+                display: none;
+                height: 337px;
+                margin-left: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+                position: static;
+                width: 318px;
+                z-index: -1;
+            }
+            .center ul li ul li {
+                background: #2b2b2b;
+                border-bottom: 1px solid #414141;
+            }
+
+            .center ul li ul li:hover {
+                background: #414141;
+            }
+
+            .center ul li ul li a {
+                display: block;
+                padding: 10px;
+                font-weight:bold;
+                min-width: 298px;
+                color:#DFDFDF;
+            }
+
+            .center ul li ul li a:hover {
+                color:#F0F0F0;
+            }
+
+
+            #iframe {
+                margin: 0 auto;
+                display: block;
+                padding-top: 60px;
+                overflow: auto;
+            }
+
+            .logo {
+                float: left;
+                margin-right: 20px;
+                margin-top: -8px;
+            }
+
+            .logo img {
+                opacity: 1;
+                max-height: 45px;
+                margin: 3px;
+            }
+
+            .logo img:hover {
+                opacity: 0.7;
+            }
+
+            .links {
+                float: right;
+                margin-top: 3px;
+            }
+
+            .responsive {
+                float: left;
+                margin-left: 14px;
+                padding: 7px 0;
+                margin-top: 3px;
+            }
+
+            .responsive a {
+                opacity:0.5;
+                float: left;
+                margin: 0 6px;
+            }
+
+            .responsive a.desktop {
+                background: url('{{ url('plugin://themes_preview/assets/images/devices.png') }}') no-repeat 0 0;
+                width: 20px;
+                height: 19px;
+            }
+
+            .responsive a.tabletlandscape {
+                background: url('{{ url('plugin://themes_preview/assets/images/devices.png') }}') no-repeat -30px -3px;
+                width: 17px;
+                height: 14px;
+                margin-top: 2px;
+            }
+
+            .responsive a.tabletportrait {
+                background: url('{{ url('plugin://themes_preview/assets/images/devices.png') }}') no-repeat -59px -1px;
+                width: 14px;
+                height: 17px;
+                margin-top: 1px;
+            }
+
+            .responsive a.mobilelandscape {
+                background: url('{{ url('plugin://themes_preview/assets/images/devices.png') }}') no-repeat -87px -4px;
+                width: 14px;
+                height: 11px;
+                margin-top: 5px;
+            }
+
+            .responsive a.mobileportrait {
+                background: url('{{ url('plugin://themes_preview/assets/images/devices.png') }}') no-repeat -117px -3px;
+                width: 11px;
+                height: 14px;
+                margin-top: 3px;
+            }
+
+            .responsive a.active, .responsive a:hover {
+                opacity:1;
+                color: #fff;
+            }
+
+            .purchase a {
+                padding: 9px 15px 8px 8px;
+                float: left;
+                border-radius: 2px;
+                font-weight: bold;
+            }
+            .purchase a {
+                background-color: #21759B;
+                background-image: linear-gradient(to bottom, #2A95C5, #21759B);
+                border-color: #21759B #21759B #1E6A8D;
+                box-shadow: 0 1px 0 rgba(120, 200, 230, 0.5) inset;
+                color: #FFFFFF;
+                text-decoration: none;
+                text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            }
+            .purchase a:hover {
+                background-color: #278AB7;
+                background-image: linear-gradient(to bottom, #2E9FD2, #21759B);
+                border-color: #1B607F;
+                box-shadow: 0 1px 0 rgba(120, 200, 230, 0.6) inset;
+                color: #FFFFFF;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            }
+            .purchase a:focus {
+                border-color: #0E3950;
+                box-shadow: 0 1px 0 rgba(120, 200, 230, 0.6) inset, 1px 1px 2px rgba(0, 0, 0, 0.4);
+            }
+
+            .purchase a img {
+                vertical-align: middle;
+                margin-right: 5px;
+                margin-top: -3px;
+                max-height: 12px;
+            }
+
+            .close a {
+                padding: 9px 15px 10px 10px;
+                float: left;
+                border-radius: 2px;
+                font-weight: bold;
+                margin-left: 15px;
+            }
+
+            .close a img {
+                vertical-align: middle;
+                margin-right: 5px;
+                margin-top: -3px;
+            }
+
+            .close a {
+                background-color: #3b3b3b;
+                background-image: linear-gradient(to bottom, #2a2a2a, #3b3b3b);
+                border-color: #3b3b3b #3b3b3b #555555;
+                box-shadow: 0 1px 0 rgba(85, 85, 85, 0.5) inset;
+                color: #FFFFFF;
+                text-decoration: none;
+                text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            }
+            .close a:hover {
+                background-color: #2a2a2a;
+                background-image: linear-gradient(to bottom, #3b3b3b, #2a2a2a);
+                border-color: #555555;
+                box-shadow: 0 1px 0 rgba(85, 85, 85, 0.6) inset;
+                color: #FFFFFF;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            }
+            .close a:focus {
+                border-color: #0E3950;
+                box-shadow: 0 1px 0 rgba(120, 200, 230, 0.6) inset, 1px 1px 2px rgba(0, 0, 0, 0.4);
+            }
+
+
+            img.preview {
+                display: none;
+                position: absolute;
+                z-index:9999;
+                top: 8px;
+                left: 342px !important;
+                background: #2b2b2b ;
+                padding: 7px;
+                border-radius: 3px;
+                -webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.7);
+                box-shadow: 0px 2px 5px rgba(0,0,0,0.7);
+                -moz-opacity: 0;
+                -webkit-opacity: 0;
+                opacity: 0;
+                max-height: 350px;
+            }
+
+            .preview{
+                position:absolute;
+                display:none;
+                padding: 3px;
+                padding-bottom: 1px;
+                background: #fff;
+                border: 1px solid #242424;
+            }
+
+            .preview img
+            {
+                width: 400px;
+            }
+
+            .center ul li ul li:hover img.preview {
+                display: inline;
+                opacity:1;
+            }
+
+            .center ul li ul li span {
+                float: right;
+                font-size: 11px;
+                font-weight:bold;
+                background: #21759B;
+                border-radius: 2px;
+                padding: 3px 8px;
+                color: #ffffff;
+                margin-top: -2px;
+                min-width: 40px;
+                text-align: center;
+                margin-right: 15px;
+            }
+
+            .modal {
+                display:    none;
+                position:   fixed;
+                z-index:    1000;
+                top:        0;
+                left:       0;
+                height:     100%;
+                width:      100%;
+                background: rgba( 255, 255, 255, .8 )
+                url('http://sampsonresume.com/labs/pIkfp.gif')
+                50% 50%
+                no-repeat;
+            }
+
+            body.loading {
+                overflow: hidden;
+            }
+
+            body.loading .modal {
+                display: block;
+            }
+
+            @media (min-width: 768px) and (max-width: 979px) {
+                .share,
+                .responsive{
+                    display:none;
+                }
+
+                img.preview {
+                    width: 360px;
+                }
+            }
+
+            @media (max-width: 767px) {
+                .share,
+                .responsive{
+                    display:none;
+                }
+
+                img.preview {
+                    width: 300px;
+                    left: 191px;
+                }
+
+                #theme_select {
+                    width: 160px;
+                }
+
+                .center ul li ul li a {
+                    min-width: 190px;
+                }
+
+                .center ul li ul {
+                    width: 168px;
+                }
+
+                .logo {
+                    margin-right: 10px;
+                }
+
+                .purchase a {
+                    padding: 9px 15px 8px 8px;
+                }
+
+                .close a {
+                    padding: 10px 5px;
+                    margin-left: 6px;
+                }
+
+                .links {
+                    font-size: 11px;
+                }
+            }
+
+
+            @media (max-width: 480px) {
+
+                #theme_select {
+                    width: 145px;
+                }
+
+                img.preview {
+                    display: none !important;
+                }
+
+                .center {
+                    width: 95%;
+                }
+
+                .purchase a {
+                    padding: 7px 4px 7px 5px;
+                }
+
+                .close a {
+                    padding: 10px 5px;
+                    margin-left: 6px;
+                }
+
+                .links {
+                    font-size: 0;
+                }
+
+                .purchase a img, .close a img {
+                    margin-right: 0;
+                }
+            }
+        </style>
+
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script>
+            var theme_list_open=false;
+
+            $(document).ready(function() {
+                function changeHeight() {
+                    var e = $("#switcher").height();
+
+                    $("#iframe").attr("height", $(window).height()-e+"px");
+                }
+
+                IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
+
+                $(window).resize(function() {
+                    changeHeight();
+                }).resize();
+
+                $("#theme_select").click(function() {
+                    if (theme_list_open == true) {
+                        $(".center ul li ul").hide();
+                        theme_list_open = false
+                    } else {
+                        $(".center ul li ul").show();
+                        theme_list_open = true
+                    }
+
+                    return false
+                });
+
+                $("#iframe").on("load", function() {
+                    $("body").removeClass("loading");
+                });
+
+                $("#theme_list ul li a").click(function() {
+                    var e = $(this).attr("rel").split(",");
+
+                    $("li.purchase a").attr("href", e[1]);
+
+                    $("li.remove_frame a").attr("href", e[0]);
+
+                    $("#iframe").fadeOut("slow").attr("src", e[0]);
+
+                    $("body").fadeIn("slow").addClass("loading");
+
+                    $("#iframe").on('load', function() {
+                        $(".modal").fadeOut("slow");
+                        $("body").removeClass("loading");
+                        $(this).fadeIn("slow");
+                    });
+
+                    /*window.location.href = "?theme="+e[2]+""*/
+
+                    $("li.close a").attr("src", e[0]);
+
+                    /*$("#theme_list a#theme_select").text($(this).text());*/
+                    $("#theme_list a#theme_select").text(e[2]);
+
+                    $(".center ul li ul").hide();
+
+                    theme_list_open=false;
+
+                    return false
+                });
+
+                $("#header-bar").hide();
+
+                var clicked = "desktop";
+
+                var t = {
+                    desktop: "100%",
+                    tabletlandscape: 1040,
+                    tabletportrait: 788,
+                    mobilelandscape: 500,
+                    mobileportrait: 340,
+                    placebo: 0
+                };
+
+                jQuery(".responsive a").on("click", function() {
+                    var e = jQuery(this);
+
+                    for (device in t) {
+                        console.log(device);
+                        console.log(t[device]);
+
+                        if (e.hasClass(device)) {
+                            clicked = device;
+
+                            /*jQuery("#iframe").width(t[device]);*/
+                            jQuery("#iframe").animate({ width: t[device] }, 500);
+
+                            if (clicked == device) {
+                                jQuery(".responsive a").removeClass("active");
+                                e.addClass("active");
+                            }
+                        }
+                    }
+
+                    return false;
+                });
+
+                if (IS_IPAD) {
+                    $("#iframe").css("padding-bottom", "60px");
+                }
+            });
+        </script>
+    </head>
+
+    <body class="loading">
+        <div id="switcher">
+            <div class="center">
+                <div class="logo">
+                    <a href="{{ base_url_absolute }}" target="_blank" title="{{ site.title }}">
+                        <img src="{{ url('plugin://themes_preview/assets/images/logo.png') }}" alt="{{ site.title }}">
+                    </a>
+                </div>
+
+                <ul>
+                    <li id="theme_list"><a id="theme_select" href="#">{{ themes[current_theme].name | default('Select a theme:') }}</a>
+                        <ul style="display: none;">
+
+                            {% for key, theme in themes %}
+                                <li class="button_a">
+                                    {% set author_color = (config.plugins.themes_preview.authors_color[theme.author]) ?: config.plugins.themes_preview.authors_color.default %}
+
+                                    <a href="#" rel="{{ theme.url }},{{ theme.homepage }},{{ theme.name }}">{{ theme.name }} <span style="background:{{ author_color }}">{{ theme.author }}</span></a>
+                                    {% if theme.preview %}<img alt="" class="preview" src="{{ theme.preview }}" />{% endif %}
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="responsive">
+                    <a href="#" class="desktop active" title="View Desktop Version"></a>
+                    <a href="#" class="tabletlandscape" title="View Tablet Landscape (1024x768)"></a>
+                    <a href="#" class="tabletportrait" title="View Tablet Portrait (768x1024)"></a>
+                    <a href="#" class="mobilelandscape" title="View Mobile Landscape (480x320)"></a>
+                    <a href="#" class="mobileportrait" title="View Mobile Portrait (320x480)"></a>
+                </div>
+
+                <ul class="links">
+                    <li class="purchase" rel="{{ themes[current_theme].homepage }}">
+                        <a href="{{ themes[current_theme].homepage }}">
+                            <img src="{{ url('plugin://themes_preview/assets/images/github.png') }}" alt="{{ site.title }}"> Homepage
+                        </a>
+                    </li>
+
+                    <li class="close" rel="{{ themes[current_theme].url }}">
+                        <a href="{{ themes[current_theme].url }}">
+                            <img src="{{ url('plugin://themes_preview/assets/images/cross.png') }}" alt="{{ site.title }}"> Close
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <iframe id="iframe" src="{{ themes[current_theme].url }}" frameborder="0" width="100%" style=""></iframe>
+
+        <div class="modal"></div>
+    </body>
+</html>

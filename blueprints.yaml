@@ -10,7 +10,7 @@ homepage: https://github.com/nunopress/grav-plugin-themes_preview
 demo: http://themes.grav-demo.nunopress.com/
 keywords: "themes, preview, plugin"
 bugs: https://github.com/nunopress/grav-plugin-themes_preview/issues
-docs: https://github.com/nunopress/grav-plugin-themes_preview/README.md
+docs: https://github.com/nunopress/grav-plugin-themes_preview/blob/develop/README.md
 license: MIT
 
 form:

@@ -1,3 +1,6 @@
 enabled: true
 
-master_domain: ""
+authors_color:
+  "NunoPress LLC" : "#ec6334"
+  "Team Grav"     : "#288aad"
+  default         : "#f2b600"
